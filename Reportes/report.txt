@@ -1,0 +1,4 @@
+### INFORME GENERADO EL 2023-11-09 22:19:40 ###
+### HOSTS ACTIVOS EN LA RED ###
+Host: 192.168.1.107 (Desconocido) está activo (respondió al ping)
+Host: 192.168.1.111 (LAPTOP-LDOME2IU) está activo (respondió al ping)

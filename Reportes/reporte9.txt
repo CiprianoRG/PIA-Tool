@@ -1,0 +1,28 @@
+### INFORME GENERADO EL 2023-11-08 20:40:54 ###
+### HOSTS ACTIVOS EN LA RED ###
+Host: 192.168.0.1 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.10 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.11 (LAPTOP-LDOME2IU) está activo (respondió al ping)
+Host: 192.168.0.253 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.4 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.5 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.6 (Desconocido) está activo (respondió al ping)
+Host: 192.168.0.8 (Desconocido) está activo (respondió al ping)
+
+### RESULTADO DEL ESCANEO DE PUERTOS ###
+Puerto     Estado    
+=========================
+135        Abierto   
+139        Abierto   
+445        Abierto   
+902        Abierto   
+912        Abierto   
+5040       Abierto   
+7680       Abierto   
+49664      Abierto   
+49665      Abierto   
+49666      Abierto   
+49667      Abierto   
+49668      Abierto   
+49670      Abierto   
+50128      Abierto   

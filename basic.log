@@ -1,0 +1,7 @@
+2023-11-09 22:11:28 INFO Iniciando escaneo de todos los puertos...192.168.1.111
+2023-11-09 22:11:31 INFO Escaneo de todos los puertos completado. Puertos abiertos: [135, 139, 445, 902, 912, 5040, 27036, 49664, 49665, 49666, 49667, 49668, 49670, 50128]
+2023-11-09 22:19:40 INFO Iniciando escaneo de hosts en la red...192.168.1.0/24
+2023-11-09 22:19:57 INFO Escaneo de hosts completado.
+2023-11-09 22:21:25 WARNING No se seleccionaaron argumentos validos
+2023-11-09 22:40:53 INFO Dominio obtenido www.fime.uanl.mx
+2023-11-09 22:40:54 INFO Ip obtenida de la consulta DNS 148.234.5.198

@@ -1,0 +1,19 @@
+### INFORME GENERADO EL 2023-11-09 22:11:28 ###
+
+### RESULTADO DEL ESCANEO DE PUERTOS ###
+Puerto     Estado    
+=========================
+135        Abierto   
+139        Abierto   
+445        Abierto   
+902        Abierto   
+912        Abierto   
+5040       Abierto   
+27036      Abierto   
+49664      Abierto   
+49665      Abierto   
+49666      Abierto   
+49667      Abierto   
+49668      Abierto   
+49670      Abierto   
+50128      Abierto   
