@@ -1,12 +1,97 @@
+import os
 import argparse
-from Modulos import webscrap
-from Modulos import scanner_ports
+import subprocess
 import logging
+from datetime import datetime
+
+from Modulos import Funciones
+from Modulos import scanner_ports
+from Modulos import webscrap
+
+logging.basicConfig(level=logging.INFO,
+                    format="%(asctime)s %(levelname)s %(message)s",
+                    datefmt="%Y-%m-%d %H:%M:%S",
+                    filename="loggin.log")
+logger = logging.getLogger(__name__)
+
+def verificar_instalar_dependencias():
+    # Verificar dependencias
+    
+    verificacion = subprocess.run(
+        ["pip", "list", "--format=freeze"],
+        stdout=subprocess.PIPE,
+        text=True)
+    if verificacion.returncode != 0:
+        print("Error al verificar e instalar dependencias.")
+    else:
+        with open("requirements.txt", "r") as file:
+            dependencias = file.read().splitlines()
+
+        dependencias_instaladas = verificacion.stdout.split("\n")
+
+        dependencias_faltantes = [dep for dep in dependencias if dep not in dependencias_instaladas]
+
+        if dependencias_faltantes:
+            # Instalar dependencias faltantes
+            subprocess.run(["pip", "install"] + dependencias_faltantes)
+        else:
+            print("Todas las dependencias están instaladas.")
+
+def validatepath(directorio):
+        
+        if not os.path.exists(directorio):
+                raise argparse.ArgumentTypeError("El directorio no existe")
+        
+        if os.access(directorio, os.R_OK):
+                return directorio
+        
+        else:
+                raise argparse.ArgumentTypeError("El directorio no se puede leer")
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='Ejecutar módulo de escaneo de puertos o análisis web.')
+    parser = argparse.ArgumentParser(description='Ejecuta uno de los modulos disponibles.\n'
+                                     '- encriptado\n'
+                                     '- scan\n'
+                                     '- webscrap\n'
+                                     '- email\n'
+                                     '- hash\n'
+                                     '- busqueda',formatter_class=argparse.RawTextHelpFormatter)
 
     subparsers = parser.add_subparsers(dest='module', help='Seleccionar el módulo a ejecutar.')
+    #Encriptado
+    parser_encriptado = subparsers.add_parser("encriptado", description="Modulo de encriptacion de un mensaje\n"
+                                            "Ejemplo de uso:\n"
+                                            "   - py main.py encriptado -mens Mensaje a encriptar -clave Clave para la encriptación(opcional)")
+    parser_encriptado.add_argument("-mens", dest="mens", help="Mensaje a encriptar")
+    parser_encriptado.add_argument("-clave", dest="clave", help="Palabra clave para cifrar", default="TILIN")
+
+    #Envio de mail
+    parser_mail = subparsers.add_parser("email", description="Modulo de envio de correo\n"
+                                                "Ejemplo de uso:\n"
+                                                "    - py main.py mail -remitente example@x.com -destinatario x@y.com\n"
+                                                "    -cc Contraseña de aplicacion -asunto Asunto del correo"
+                                                "    -correo Cuerpo del correo",
+                                                formatter_class=argparse.RawTextHelpFormatter)
+    parser_mail.add_argument("-remitente", dest="remitente", type=str, help="Correo que envia el mensaje")
+    parser_mail.add_argument("-destinatario", dest="destinatario", type=str, help="Correo objetivo")
+    parser_mail.add_argument("-cc", dest="cc", type=str, help="Contraseña de correo")
+    parser_mail.add_argument("-asunto", dest="asunto", type=str, help="El asunto del correo")
+    parser_mail.add_argument("-correo", dest="correo", help="Cuerpo del correo")
+
+    #Valor hash de un directorio
+    parser_hash = subparsers.add_parser("hash", description="Modulo para obtener valor hash de un directorio\n"
+                                                        "Ejemplo de uso:\n"
+                                                        "       - py main.py hash -b Nombre de archivo base + .pickle"
+                                                        "       -p Directorio objetivo"
+                                                        "       -t Archivo temporal",
+                                                        formatter_class=argparse.RawTextHelpFormatter)
+    parser_hash.add_argument("-b", dest="baseline", help="Archivo base")
+    parser_hash.add_argument("-p", dest="path", type=validatepath, help="Objetivo a buscar hash")
+    parser_hash.add_argument("-tmp", dest="tmp", help="Archivo temporal")
+
+    #web scrapping
+    parser_busqueda = subparsers.add_parser("busqueda", help="")
+    parser_busqueda.add_argument("busqueda", help="Palabra a buscar")
 
     # Subparser para el módulo de escaneo de puertos
     parser_scan = subparsers.add_parser('scan', description='ESTAS EJECUTANDO EL MODULO DE ESCANEO DE PUERTOS\n'
@@ -42,19 +127,32 @@ def parse_args():
     return parser.parse_args()
 
 if __name__ == "__main__":
-    args = parse_args()
-    module_to_run = args.module
+    #verificar_instalar_dependencias()
 
-    if module_to_run == 'scan':
-        # Lógica para ejecutar el módulo de escaneo de puertos
-        scanner_ports.scan(args.ip, args)
-    elif module_to_run == 'webscrap':
-        # Lógica para ejecutar el módulo de análisis web
-        if args.tecnologias or args.banner or args.correos:
-            webscrap.web(args.target, args)
+    try:
+        params = parse_args()
+        module_to_run = params.module
+
+        if module_to_run == "encriptado":
+            Funciones.encriptado(params.mens, params.clave)
+        elif module_to_run == "hash":
+            Funciones.obt_hash(params.baseline, params.path, params.tmp)
+        elif module_to_run == "email":
+            Funciones.envio_correo(params.remitente, params.cc, params.destinatario, params.asunto, params.correo)
+        elif module_to_run == "busqueda":
+            Funciones.busqueda(params.busqueda)
+        elif module_to_run == "scan":
+            scanner_ports.scan(params.ip, params)
+        elif module_to_run == "webscrap":
+            webscrap.web(params.target, params)
         else:
-            print('Por favor, seleccione al menos una opción: -tec, -sbn, o -email.')
-    else:
-        print('Por favor, seleccione un módulo válido: scan o webscrap.')
+            logger.error(f'Modulo no reconocido: {module_to_run}')
+            print(f"Módulo no reconocido: {module_to_run}")
 
+    except argparse.ArgumentError as e:
+        logger.error(f'Error en los argumentos: {e}')
+        print(f"Error en los argumentos: {e}")
+
+    except Exception as e:
+        logger.error(f'Error durante la ejecución: {e}')
 
