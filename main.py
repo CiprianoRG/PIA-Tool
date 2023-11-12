@@ -37,6 +37,7 @@ def validatepath(directorio):
                 raise argparse.ArgumentTypeError("El directorio no se puede leer")
 
 def parse_args():
+    valor=False
     parser = argparse.ArgumentParser(description='Ejecuta uno de los modulos disponibles.\n'
                                      '- encriptado\n'
                                      '- scan\n'
@@ -46,11 +47,11 @@ def parse_args():
                                      '- busqueda',formatter_class=argparse.RawTextHelpFormatter)
 
     subparsers = parser.add_subparsers(dest='module', help='Seleccionar el módulo a ejecutar.')
-    #Envio de notificacion
-    parser.add_argument("-mynumber", dest="mynumber", help="Tu numero de telefono", required=True)
-    parser.add_argument("-twilio", dest="twilio", help="Tu numero de twilio", required=True)
-    parser.add_argument("-sid", dest="sid", help="Sid de twilio", required=True)
-    parser.add_argument("-token", dest="token", help="Token de twilio", required=True)
+    ### Argumentos para enviar mensaje
+    parser.add_argument("-mynumber", dest="mynumber", help="Tu numero de telefono", required=valor)
+    parser.add_argument("-twilio", dest="twilio", help="Tu numero de twilio", required=valor)
+    parser.add_argument("-sid", dest="sid", help="Sid de twilio", required=valor)
+    parser.add_argument("-token", dest="token", help="Token de twilio", required=valor)
 
     #Encriptado
     parser_encriptado = subparsers.add_parser("encriptado", description="Modulo de encriptacion de un mensaje\n"
@@ -58,6 +59,7 @@ def parse_args():
                                             "   - py main.py encriptado -mens Mensaje a encriptar -clave Clave para la encriptación(opcional)")
     parser_encriptado.add_argument("-mens", dest="mens", help="Mensaje a encriptar")
     parser_encriptado.add_argument("-clave", dest="clave", help="Palabra clave para cifrar", default="TILIN")
+
 
     #Envio de mail
     parser_mail = subparsers.add_parser("email", description="Modulo de envio de correo\n"
@@ -82,6 +84,8 @@ def parse_args():
     parser_hash.add_argument("-b", dest="baseline", help="Archivo base")
     parser_hash.add_argument("-p", dest="path", type=validatepath, help="Objetivo a buscar hash")
     parser_hash.add_argument("-tmp", dest="tmp", help="Archivo temporal")
+
+
 
     #web scrapping
     parser_busqueda = subparsers.add_parser("busqueda", help="")
@@ -118,7 +122,9 @@ def parse_args():
     parser_webscrap.add_argument('-p', '--puerto', type=int, default=80, help='Puerto del servidor web (predeterminado: 80).')
     parser_webscrap.add_argument('--output_file', '-o', help='Nombre del archivo de salida (formato TXT).')
 
-    return parser.parse_args()
+    args = parser.parse_args()
+
+    return args
 
 if __name__ == "__main__":
     #verificar_instalar_dependencias()
@@ -129,12 +135,13 @@ if __name__ == "__main__":
 
         if module_to_run == "encriptado":
             Funciones.encriptado(params.mens, params.clave)
-            
-         
+            notificacion(params.sid, params.token, params.twilio, params.mynumber)
+
+               
         elif module_to_run == "hash":
             Funciones.obt_hash(params.baseline, params.path, params.tmp)
+
             
-           
         elif module_to_run == "email":
             Funciones.envio_correo(params.remitente, params.cc, params.destinatario, params.asunto, params.correo)
             
@@ -153,10 +160,9 @@ if __name__ == "__main__":
             
         else:
             logger.error(f'Modulo no reconocido: {module_to_run}')
-            print(f"Módulo no reconocido: {module_to_run}")
-            
+            print(f"Módulo no reconocido: {module_to_run}")        
+
         notificacion(params.sid, params.token, params.twilio, params.mynumber)
-        
 
     except argparse.ArgumentError as e:
         logger.error(f'Error en los argumentos: {e}')
