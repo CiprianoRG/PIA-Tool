@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import logging
 from datetime import datetime
-
+from twilio.rest import Client
 from Modulos import Funciones
 from Modulos import scanner_ports
 from Modulos import webscrap
@@ -13,6 +13,17 @@ logging.basicConfig(level=logging.INFO,
                     datefmt="%Y-%m-%d %H:%M:%S",
                     filename="loggin.log")
 logger = logging.getLogger(__name__)
+
+def notificacion(asid, token, remitente, destinatario):
+        
+        twcl = Client(asid, token)
+        fecha = datetime.now()
+        formato = fecha.strftime("%d, %m, %Y, %R")      
+        msg = "El script finalizo" + " " + formato
+
+        message = twcl.messages.create(to = destinatario,
+                                               from_ = remitente,
+                                               body= msg)
 
 def validatepath(directorio):
         
@@ -41,6 +52,12 @@ def parse_args():
                                             "   - py main.py encriptado -mens Mensaje a encriptar -clave Clave para la encriptación(opcional)")
     parser_encriptado.add_argument("-mens", dest="mens", help="Mensaje a encriptar")
     parser_encriptado.add_argument("-clave", dest="clave", help="Palabra clave para cifrar", default="TILIN")
+
+    # Envio de mensajes
+    parser_encriptado.add_argument('-sid',dest="asid", required=True, help='Account SID de Twilio')
+    parser_encriptado.add_argument('-tk',dest="token", required=True, help='Token de Twilio')
+    parser_encriptado.add_argument('-rmt',dest="remitente", required=True, help='Número de Twilio (remitente)')
+    parser_encriptado.add_argument('-dest',dest="destinatario", required=True, help='Número de teléfono al que se enviará la notificación')
 
     #Envio de mail
     parser_mail = subparsers.add_parser("email", description="Modulo de envio de correo\n"
@@ -111,7 +128,10 @@ if __name__ == "__main__":
         module_to_run = params.module
 
         if module_to_run == "encriptado":
+            if params.asid and params.tk  and params.rmt and params.dest:
+                 print('Esta funcionando los parametros')
             Funciones.encriptado(params.mens, params.clave)
+            notificacion(params.asid, params.token, params.remitente, params.destinatario)
         elif module_to_run == "hash":
             Funciones.obt_hash(params.baseline, params.path, params.tmp)
         elif module_to_run == "email":
