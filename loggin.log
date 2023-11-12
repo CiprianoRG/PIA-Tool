@@ -1,0 +1,12 @@
+2023-11-11 23:55:44 ERROR Modulo no reconocido: None
+2023-11-11 23:56:12 INFO Iniciando escaneo de todos los puertos...192.168.1.111
+2023-11-11 23:56:15 INFO Escaneo de todos los puertos completado. Puertos abiertos: [135, 139, 445, 902, 912, 5040, 49664, 49665, 49666, 49667, 49668, 49670, 50128]
+2023-11-11 23:58:11 INFO Iniciando escaneo de todos los puertos...192.168.1.111
+2023-11-11 23:58:14 INFO Escaneo de todos los puertos completado. Puertos abiertos: [135, 139, 445, 902, 912, 5040, 49664, 49665, 49666, 49667, 49668, 49670, 50128]
+2023-11-11 23:58:18 INFO Iniciando escaneo de todos los puertos...192.168.1.111
+2023-11-11 23:58:21 INFO Escaneo de todos los puertos completado. Puertos abiertos: [135, 139, 445, 902, 912, 5040, 49664, 49665, 49666, 49667, 49668, 49670, 50128]
+2023-11-11 23:58:34 INFO Iniciando escaneo de todos los puertos...192.168.1.111
+2023-11-11 23:58:37 INFO Escaneo de todos los puertos completado. Puertos abiertos: [135, 139, 445, 902, 912, 5040, 49664, 49665, 49666, 49667, 49668, 49670, 50128]
+2023-11-11 23:59:51 ERROR Modulo no reconocido: None
+2023-11-12 00:00:12 ERROR Modulo no reconocido: None
+2023-11-12 00:00:17 ERROR Modulo no reconocido: None

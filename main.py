@@ -14,29 +14,6 @@ logging.basicConfig(level=logging.INFO,
                     filename="loggin.log")
 logger = logging.getLogger(__name__)
 
-def verificar_instalar_dependencias():
-    # Verificar dependencias
-    
-    verificacion = subprocess.run(
-        ["pip", "list", "--format=freeze"],
-        stdout=subprocess.PIPE,
-        text=True)
-    if verificacion.returncode != 0:
-        print("Error al verificar e instalar dependencias.")
-    else:
-        with open("requirements.txt", "r") as file:
-            dependencias = file.read().splitlines()
-
-        dependencias_instaladas = verificacion.stdout.split("\n")
-
-        dependencias_faltantes = [dep for dep in dependencias if dep not in dependencias_instaladas]
-
-        if dependencias_faltantes:
-            # Instalar dependencias faltantes
-            subprocess.run(["pip", "install"] + dependencias_faltantes)
-        else:
-            print("Todas las dependencias están instaladas.")
-
 def validatepath(directorio):
         
         if not os.path.exists(directorio):
