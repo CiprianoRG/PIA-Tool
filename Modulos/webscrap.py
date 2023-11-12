@@ -1,20 +1,27 @@
-import socket
-import builtwith
-import requests
-import re
-from urllib.parse import urlparse
-import whois
-import datetime
 import os
-import gzip
 import logging
+
+try:
+    import socket
+    import builtwith
+    import requests
+    import re
+    from urllib.parse import urlparse
+    import whois
+    import datetime
+    import gzip
+except ImportError:
+    #os.system("pipreqs ./")
+    os.system("pip install pipreqs")
+    os.system("pip install -r requirements.txt")
+    exit()
 
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(message)s",
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    filename="basic.log")
+                    filename="loggin.log")
 logger = logging.getLogger(__name__)
 
 

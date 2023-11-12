@@ -14,7 +14,7 @@ formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
 logging.basicConfig(level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(message)s",
                     datefmt="%Y-%m-%d %H:%M:%S",
-                    filename="basic.log")
+                    filename="loggin.log")
 
 
 def save_to_report(report_filename, ports,hosts,version):
