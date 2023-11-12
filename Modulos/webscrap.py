@@ -1,20 +1,9 @@
 import os
 import logging
+import datetime
+import socket
 
-try:
-    import socket
-    import builtwith
-    import requests
-    import re
-    from urllib.parse import urlparse
-    import whois
-    import datetime
-    import gzip
-except ImportError:
-    #os.system("pipreqs ./")
-    os.system("pip install pipreqs")
-    os.system("pip install -r requirements.txt")
-    exit()
+
 
 current_datetime = datetime.datetime.now()
 formatted_datetime = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
@@ -24,10 +13,28 @@ logging.basicConfig(level=logging.INFO,
                     filename="loggin.log")
 logger = logging.getLogger(__name__)
 
+try:
+    import builtwith
+    import requests
+    import re
+    from urllib.parse import urlparse
+    import whois
+    import gzip
+except ImportError:
+    #os.system("pipreqs ./")
+    logger.error('Error al importar las librerias')
+    logger.info('Instalando librerias faltantes')
+    os.system("pip install pipreqs")
+    os.system("pip install -r requirements.txt")
+    exit()
+
+
+
 
 def save_to_report(report_filename,ip_info,infodomain,tecno,banner,emails):
     with open(report_filename, 'w') as file:
         file.write("#"*25+f" INFORME GENERADO EL {formatted_datetime} "+"#"*25+"\n")
+        file.write(f"\n"+"#"*25+" INFORMACION OBTENIDA DE SHODAN "+"#"*25+"\n")
         file.write(f"IP: {ip_info['ip']}\n")
         file.write(f"Puertos abiertos: {', '.join(map(str, ip_info['ports']))}\n")
         file.write(f"CPEs: {', '.join(ip_info['cpes'])}\n")

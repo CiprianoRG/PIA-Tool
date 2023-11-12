@@ -122,13 +122,11 @@ def scan(ip,args):
     try:
         if args.scan_hosts:
             network_to_scan = '.'.join(ip.split('.')[:-1]) + '.0/24'
-            print('#####HACES UN ESCANEO DE RED')
             logger.info(f'Iniciando escaneo de hosts en la red...{network_to_scan}')
             active_hosts = scan_hosts(network_to_scan)
             logger.info('Escaneo de hosts completado.')
 
         if args.scan_ports and (args.allports):
-            print('##### ESTAS HACIENDOP UN ESCANEO DE TODOS LOS PUERTOS')
             logger.info(f'Iniciando escaneo de todos los puertos...{ip}')
             open_ports=full_scan_ports(ip)
             logger.info(f'Escaneo de todos los puertos completado. Puertos abiertos: {open_ports}')
@@ -164,11 +162,9 @@ def scan(ip,args):
             if open_ports:
                 # Realizar escaneo de versiones usando open_ports
                 versiones = scan_versions(ip, open_ports)
-                print('##### Estás haciendo escaneo con la lista dada de los escaneos')
             elif args.ports:
                 # Realizar escaneo de versiones usando ports
                 ports = parse_ports(args.ports) if args.ports else print('Necesitas ingresar puertos para escanear sus versiones')
-                print('##### estas haciendo un escaneo con puertos')
                 versiones = scan_versions(ip, ports)
 
 ##### Desde aqui se manda a crear el archivo de reporte
@@ -181,7 +177,7 @@ def scan(ip,args):
                 os.makedirs(directorio_reportes)
             ruta_reporte = os.path.join(directorio_reportes, args.output_file)
             save_to_report(ruta_reporte,open_ports,active_hosts,versiones)
-
+            
     except Exception as e:
         logger.error(f'Error durante la ejecución: {e}')
     except KeyboardInterrupt:

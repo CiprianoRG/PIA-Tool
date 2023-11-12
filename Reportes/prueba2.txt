@@ -1,7 +1,0 @@
-### INFORME GENERADO EL 2023-11-09 22:18:57 ###
-
-### RESULTADO DEL ESCANEO DE PUERTOS ###
-Puerto     Estado    
-=========================
-135        Abierto   
-139        Abierto   
